@@ -9,24 +9,29 @@ import java.util.concurrent.RejectedExecutionException;
 
 public class AddClientThread extends Thread {
   private final ActiveObject activeObject;
-  private final char filterChar;
+  private String x = "1";
+  private String y = "1";
 
   public AddClientThread(String name, ActiveObject activeObject) {
     super(name);
     this.activeObject = activeObject;
-    this.filterChar = name.charAt(0);
   }
 
   @Override
   public void run() {
     try {
       for (int i = 0; true; i++) {
-        Future<String> result = activeObject.makeString(i, filterChar);
-        Thread.sleep(10);
-        String value = result.get();
-        System.out.println(Thread.currentThread().getName() + ": value = " + value);
+        Future<String> result = activeObject.add(x, y);
+        Thread.sleep(100);
+        String z = result.get();
+        System.out.println(Thread.currentThread().getName() + ": " + x + " + " + y + " = " + z);
+        x = y;
+        y = z;
       }
-    } catch (RejectedExecutionException | CancellationException | ExecutionException | InterruptedException e) {
+    } catch (RejectedExecutionException
+        | CancellationException
+        | ExecutionException
+        | InterruptedException e) {
       System.out.println(Thread.currentThread().getName() + ":" + e);
     }
   }

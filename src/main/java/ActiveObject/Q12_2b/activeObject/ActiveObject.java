@@ -7,5 +7,7 @@ public interface ActiveObject {
 
   void displayString(String string);
 
+  Future<String> add(String x, String y);
+
   void shutdown();
 }
